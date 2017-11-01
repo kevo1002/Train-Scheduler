@@ -46,38 +46,4 @@ var trainData = firebase.database();
     $("#destination-input").val("");
     $("#first-train-input").val("");
     $("#frequency-input").val("");
-
-    // Determine when the next train arrives.
-    return false;
-  });
-
-  // 4. Create Firebase event for adding trains to the database and a row in the html when a user adds an entry
-  trainData.ref().on("child_added", function(childSnapshot, prevChildkey) {
-
-    console.log(childSnapshot.val());
-
-    // Store everything into a variable.
-    var tName = childSnapshot.val().name;
-    var tDestination = childSnapshot.val().destination;
-    var tFrequency = childSnapshot.val().frequency;
-    var tFirstTrain = childSnapshot.val().firstTrain;
-
-    // Calculate the minutes until arrival using hardcore math
-    // To calculate the minutes till arrival, take the current time in unix subtract the FirstTrain time
-    // and find the modulus between the difference and the frequency.
-    var differenceTimes = moment().diff(moment.unix(tFirstTrain), "minutes");
-    var tRemainder = moment().diff(moment.unix(tFirstTrain), "minutes") % tFrequency;
-    var tMinutes = tFrequency - tRemainder;
-
-    // To calculate the arrival time, add the tMinutes to the current time
-    var tArrival = moment().add(tMinutes, "m").format("hh:mm A");
-
-    console.log(tMinutes);
-    console.log(tArrival);
-    console.log(moment().format("hh:mm A"));
-    console.log(tArrival);
-    console.log(moment().format("X"));
-
-    // Add each train's data into the table
-    $("#train-table > tbody").append("<tr><td>" + tName + "</td><td>" + tDestination + "</td><td>" + tFrequency + "</td><td>" + tArrival + "</td><td>" + tMinutes + "</td></tr>");
   });
